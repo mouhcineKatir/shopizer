@@ -1,4 +1,4 @@
-Official Shopizer 2.0.6 (ALPHA)
+Official Shopizer 2.0.6 - ALPHA -
 -------------------
 Java open source e-commerce software
 
