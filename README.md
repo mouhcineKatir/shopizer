@@ -1,4 +1,4 @@
-Official Shopizer 2.0.4 (master)
+Official Shopizer 2.0.6 (ALPHA)
 -------------------
 Java open source e-commerce software
 
@@ -8,8 +8,7 @@ Java open source e-commerce software
 - Checkout
 - Administration
 
-### This version (master - 2.0.4) runs only with java 1.7
-An upcoming version 2.0.5 for Java 1.8 will be available soon (December 2016)
+Works with Java 1.8
 
 To get the code:
 -------------------

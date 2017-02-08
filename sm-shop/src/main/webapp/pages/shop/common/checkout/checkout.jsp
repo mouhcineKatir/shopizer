@@ -26,8 +26,8 @@ response.setDateHeader ("Expires", -1);
 <script type="text/html" id="subTotalsTemplate">
 		{{#subTotals}}
 			<tr class="subt"> 
-				<td colspan="2">{{title}}</td> 
-				<td><strong>{{total}}</strong></td> 
+				<td colspan="2">{{#discounted}}<s:message code="label.generic.rebate" text="Rebate" />&nbsp;-&nbsp;{{text}}{{/discounted}}{{^discounted}}{{title}}{{/discounted}}</td> 
+				<td><strong>{{#discounted}}<font color="red">-{{total}}</font>{{/discounted}}{{^discounted}}{{total}}{{/discounted}}</strong></td> 
 			</tr>
 		{{/subTotals}}
 </script>
@@ -500,7 +500,7 @@ function shippingQuotes(){
 	
 	$.ajax({
 	  type: 'POST',
-	  url: '<c:url value="/shop/order/shippingQuotes.html"/>',
+	  url: '<c:url value="/shop/order/shippingQuotes.json"/>',
 	  data: data,
 	  cache: false,
 	  dataType: 'json',
@@ -753,7 +753,7 @@ function calculateTotal(){
 	
 	$.ajax({
 	  type: 'POST',
-	  url: '<c:url value="/shop/order/calculateOrderTotal.html"/>',
+	  url: '<c:url value="/shop/order/calculateOrderTotal.json"/>',
 	  data: data,
 	  cache: false,
 	  dataType: 'json',
@@ -1401,10 +1401,23 @@ $(document).ready(function() {
 													<!-- subtotals -->
 													<c:forEach items="${order.orderTotalSummary.totals}" var="total">
 													<c:if test="${total.orderTotalCode!='order.total.total'}">
+
+
 													<tr class="subt"> 
-														<td colspan="2"><s:message code="${total.orderTotalCode}" text="${total.orderTotalCode}"/></td> 
-														<td><strong><sm:monetary value="${total.value}" /></strong></td> 
+														<td colspan="2">
+														<c:choose>
+																<c:when test="${total.orderTotalCode=='order.total.discount'}">
+														<s:message code="label.generic.rebate" text="Rebate"/>&nbsp;-&nbsp;<s:message code="${total.text}" text="${total.text}"/>
+																</c:when>
+																<c:otherwise>
+																	<s:message code="${total.orderTotalCode}" text="${total.orderTotalCode}"/>
+																</c:otherwise>
+														</c:choose>
+														</td> 
+														<td><strong><c:choose><c:when test="${total.orderTotalCode=='order.total.discount'}"><font color="red">- <sm:monetary value="${total.value}" /></font></c:when><c:otherwise><sm:monetary value="${total.value}" /></c:otherwise></c:choose></strong></td> 
 													</tr> 
+
+ 
 													</c:if>
 													</c:forEach>
 												</tbody> 

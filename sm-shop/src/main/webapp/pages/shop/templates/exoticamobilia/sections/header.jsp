@@ -38,7 +38,10 @@ $(document).ready(function() {
 			}
 			$('#hiddenQuery').val(q);
 			//log('Search string : ' + searchQuery);
-	        $('#hiddenSearchForm').submit();
+			var uri = '<c:url value="/shop/search/search.html"/>?q=' + q;
+            var res = encodeURI(uri);
+			e.preventDefault();//action url will be overriden
+	        $('#hiddenSearchForm').attr('action',res).submit();
    });
 
    
@@ -52,8 +55,16 @@ $(document).ready(function() {
 		     prefetch: '<c:out value="${requestScope.CONFIGS['defaultSearchConfigPath'][requestScope.LANGUAGE.code]}"/>',
 		  </c:if>
 	    </c:if>
-	    remote: '<c:url value="/services/public/search/${requestScope.MERCHANT_STORE.code}/${requestScope.LANGUAGE.code}/autocomplete.html"/>?q=%QUERY'
+	    remote: {
+    		url: '<c:url value="/services/public/search/${requestScope.MERCHANT_STORE.code}/${requestScope.LANGUAGE.code}/autocomplete.json"/>?q=%QUERY',
+        	filter: function (parsedResponse) {
+            	// parsedResponse is the array returned from your backend
+            	console.log(parsedResponse);
 
+            	// do whatever processing you need here
+            	return JSON.parse(parsedResponse);
+        	}
+    	}
 	});
    
    searchElements.initialize();
@@ -147,7 +158,7 @@ $(document).ready(function() {
 		<span class="no-responsive uppercase"><s:message code="label.cart" text="Shopping cart"/></span> (0)
 		{{/code}}
 		{{#code}}
-		<span class="no-responsive uppercase"><s:message code="label.cart" text="Shopping cart"/></span> ({{quantity}})
+		<span class="no-responsive uppercase"><s:message code="label.cart" text="Shopping cart"/></span> <font color="red"><strong>({{quantity}})</strong></font>
 		{{/code}}
 </script>
 
@@ -160,7 +171,7 @@ $(document).ready(function() {
 					<a onClick="javascript:location.href='<c:url value="/shop/customer/dashboard.html" />';" href="#"><i class="fa fa-user"></i><s:message code="label.customer.myaccount" text="My account"/></a>
 				</li>
 				<li>
-					<a onClick="javascript:location.href='<c:url value="/shop/customer/j_spring_security_logout" />';" href="#"><i class="fa fa-power-off"></i><s:message code="button.label.logout" text="Logout"/></a>
+					<a onClick="javascript:location.href='<c:url value="/shop/customer/logout" />';" href="#"><i class="fa fa-power-off"></i><s:message code="button.label.logout" text="Logout"/></a>
 				</li>
 		</ul>
 </script>
@@ -335,24 +346,8 @@ $(document).ready(function() {
 						                </c:choose>
 									</c:otherwise>
 								</c:choose>
-								<!-- logo -->
-								<!-- 
-								<div class="logo" id="logo">a grey
-									<h1 class="logo-text" alt="Entrepôt de meubles exotiques à Montréal"><span class="logo-text-inner">ExotiKA Mobilia</span></h1>
-								</div>
-
 								
-								<div class="site-slogan">
-									Meubles exotiques importés de qualité
-								</div>
-								-->
-								
-
 							</div>
 							<!-- header-left end -->
 
 						</div>
-
-
-
-			
